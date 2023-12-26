@@ -38,18 +38,17 @@ def isSafe(board, row, col):
         j -= 1
  
     return True
-def solve(board, col):
+
+def solve(board, col, solutions):
     if col >= n:
-        return True
+        solutions.append([row[:] for row in board])
+        return
     
     for i in range(n):
         if isSafe(board, i, col):
             board[i][col] = 1
-            if solve(board, col + 1) == True:
-                return True
-    
-        board[i][col] = 0
-    return False
+            solve(board, col + 1, solutions)
+            board[i][col] = 0
 
 def printsol(s,n):
     for i in range(n):
@@ -62,9 +61,17 @@ def printsol(s,n):
 
 def final_solve():
     board = [[0 for i in range(n)] for j in range(n)]
-    if solve(board, 0) == False:
+    solutions = []
+    solve(board, 0, solutions)
+    
+    if len(solutions) == 0:
         print("No solution exists")
     else:
-        printsol(board,n)
-        
+        i=1
+        for solution in solutions:
+            print(i)
+            printsol(solution, n)
+            print('\n')
+            i+=1
+
 final_solve()
